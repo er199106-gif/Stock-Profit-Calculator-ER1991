@@ -558,23 +558,3 @@ body::before {
         font-size: 1.2rem;
     }
 }
-/* إضافة هذه الأنماط في نهاية الملف السابق */
-
-/* تنسيق صف الإجمالي بالعمولة */
-.total-commission-row {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(245, 158, 11, 0.3);
-}
-
-.total-commission-row input {
-    border-color: var(--accent) !important;
-    background: rgba(245, 158, 11, 0.05) !important;
-}
-
-/* إزالة شارة الذكي */
-.smart-badge {
-    display: none;
-}
-
-/* تحسين تنسيقات النتائج في الإيصال */
