@@ -51,7 +51,6 @@
                                 اسم السهم
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-chart-line"></i>
                                 <input type="text" id="stockName" placeholder="مثال: أرامكو" data-ar="مثال: أرامكو" data-en="e.g: Aramco" required>
                             </div>
                         </div>
@@ -63,7 +62,6 @@
                                 عدد الأسهم
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-hashtag"></i>
                                 <input type="number" id="shares" placeholder="0" min="1" required>
                             </div>
                         </div>
@@ -75,7 +73,6 @@
                                 سعر الشراء للسهم
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-tag"></i>
                                 <input type="number" id="purchasePrice" placeholder="0.00" min="0" step="0.01">
                             </div>
                         </div>
@@ -84,7 +81,6 @@
                                 إجمالي سعر الشراء (بدون عمولة)
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-money-bill-wave"></i>
                                 <input type="number" id="totalPurchase" placeholder="0.00" min="0" step="0.01">
                             </div>
                         </div>
@@ -96,7 +92,6 @@
                                 إجمالي سعر الشراء (بما في ذلك العمولة)
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-hand-holding-usd"></i>
                                 <input type="number" id="totalPurchaseIncl" placeholder="0.00" min="0" step="0.01">
                             </div>
                         </div>
@@ -108,7 +103,6 @@
                                 عمولة الشراء (%)
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-percentage"></i>
                                 <input type="number" id="commissionPercent" placeholder="0.00" min="0" max="100" step="0.01">
                             </div>
                         </div>
@@ -117,7 +111,6 @@
                                 مبلغ عمولة الشراء
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-coins"></i>
                                 <input type="number" id="commissionAmount" placeholder="0.00" min="0" step="0.01">
                             </div>
                         </div>
@@ -129,7 +122,6 @@
                                 سعر السهم الحالي
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-chart-line"></i>
                                 <input type="number" id="currentPrice" placeholder="0.00" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -141,7 +133,6 @@
                                 عمولة البيع (%)
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-percentage"></i>
                                 <input type="number" id="sellingCommissionPercent" placeholder="0.00" min="0" max="100" step="0.01">
                             </div>
                         </div>
@@ -150,7 +141,6 @@
                                 مبلغ عمولة البيع
                             </label>
                             <div class="input-wrapper">
-                                <i class="fas fa-coins"></i>
                                 <input type="number" id="sellingCommissionAmount" placeholder="0.00" min="0" step="0.01">
                             </div>
                         </div>
@@ -182,9 +172,6 @@
 
             <div class="result-grid">
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="اسم السهم" data-en="Stock Name">اسم السهم</span>
                         <span id="resultStockName" class="value"></span>
@@ -192,9 +179,6 @@
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-hashtag"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="عدد الأسهم" data-en="Number of Shares">عدد الأسهم</span>
                         <span id="resultShares" class="value"></span>
@@ -202,33 +186,27 @@
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
                     <div class="card-content">
-                        <span class="label" data-ar="إجمالي الشراء بدون عمولة" data-en="Total Purchase (Excl. Commission)">
-                            إجمالي الشراء بدون عمولة
-                        </span>
+                        <span class="label" data-ar="سعر الشراء للسهم" data-en="Share Price at Purchase">سعر الشراء للسهم</span>
+                        <span id="resultPurchasePrice" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-content">
+                        <span class="label" data-ar="إجمالي سعر الشراء (بدون عمولة)" data-en="Total Purchase (Excl. Commission)">إجمالي سعر الشراء (بدون عمولة)</span>
                         <span id="resultTotalPurchase" class="value"></span>
                     </div>
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-hand-holding-usd"></i>
-                    </div>
                     <div class="card-content">
-                        <span class="label" data-ar="إجمالي الشراء بالعمولة" data-en="Total Purchase (Incl. Commission)">
-                            إجمالي الشراء بالعمولة
-                        </span>
+                        <span class="label" data-ar="إجمالي سعر الشراء (بما في ذلك العمولة)" data-en="Total Purchase (Incl. Commission)">إجمالي سعر الشراء (بما في ذلك العمولة)</span>
                         <span id="resultTotalWithCommission" class="value"></span>
                     </div>
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="مبلغ عمولة الشراء" data-en="Purchase Commission Amount">مبلغ عمولة الشراء</span>
                         <span id="resultCommission" class="value"></span>
@@ -236,19 +214,20 @@
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
                     <div class="card-content">
-                        <span class="label" data-ar="إجمالي البيع" data-en="Total Selling Amount">إجمالي البيع</span>
+                        <span class="label" data-ar="سعر السهم الحالي" data-en="Current Share Price">سعر السهم الحالي</span>
+                        <span id="resultCurrentPrice" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-content">
+                        <span class="label" data-ar="إجمالي بيع الأسهم" data-en="Total Selling Amount">إجمالي بيع الأسهم</span>
                         <span id="resultTotalSelling" class="value"></span>
                     </div>
                 </div>
 
                 <div class="result-card">
-                    <div class="card-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="مبلغ عمولة البيع" data-en="Selling Commission Amount">مبلغ عمولة البيع</span>
                         <span id="resultSellingCommission" class="value"></span>
@@ -256,9 +235,6 @@
                 </div>
 
                 <div class="result-card profit-card">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="الربح / الخسارة" data-en="Profit / Loss">الربح / الخسارة</span>
                         <span id="resultProfitLoss" class="value"></span>
@@ -266,9 +242,6 @@
                 </div>
 
                 <div class="result-card percentage-card">
-                    <div class="card-icon">
-                        <i class="fas fa-percentage"></i>
-                    </div>
                     <div class="card-content">
                         <span class="label" data-ar="النسبة المئوية" data-en="Percentage">النسبة المئوية</span>
                         <span id="resultPercentage" class="value"></span>
