@@ -1,6 +1,7 @@
 // المتغيرات العامة
 let calculationData = {};
 let currentLang = 'ar'; // اللغة الافتراضية
+let isCalculating = false;
 
 // تبديل اللغة
 document.getElementById('langBtn').addEventListener('click', toggleLanguage);
@@ -53,6 +54,9 @@ document.getElementById('stockForm').addEventListener('submit', function(e) {
 
 // تحديث حسابات الشراء تلقائياً
 function updatePurchaseCalculations() {
+    if (isCalculating) return;
+    isCalculating = true;
+    
     const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
     const shares = parseFloat(document.getElementById('shares').value) || 0;
     const totalPurchase = parseFloat(document.getElementById('totalPurchase').value) || 0;
@@ -100,10 +104,15 @@ function updatePurchaseCalculations() {
             document.getElementById('commissionPercent').value = ((totalPurchaseIncl - totalPurchase) / totalPurchase * 100).toFixed(2);
         }
     }
+    
+    isCalculating = false;
 }
 
 // تحديث حسابات البيع تلقائياً
 function updateSellingCalculations() {
+    if (isCalculating) return;
+    isCalculating = true;
+    
     const shares = parseFloat(document.getElementById('shares').value) || 0;
     const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 0;
     const sellingCommissionPercent = parseFloat(document.getElementById('sellingCommissionPercent').value) || 0;
@@ -122,6 +131,8 @@ function updateSellingCalculations() {
         const calculatedPercent = (sellingCommissionAmount / totalSelling) * 100;
         document.getElementById('sellingCommissionPercent').value = calculatedPercent.toFixed(2);
     }
+    
+    isCalculating = false;
 }
 
 // إعداد المستمعات لـ حسابات الشراء
@@ -215,9 +226,11 @@ function calculateResults() {
 function displayResults() {
     document.getElementById('resultStockName').textContent = calculationData.stockName;
     document.getElementById('resultShares').textContent = calculationData.shares;
+    document.getElementById('resultPurchasePrice').textContent = `${calculationData.purchasePrice} SAR`;
     document.getElementById('resultTotalPurchase').textContent = `${calculationData.totalPurchase} SAR`;
     document.getElementById('resultTotalWithCommission').textContent = `${calculationData.totalWithCommission} SAR`;
     document.getElementById('resultCommission').textContent = `${calculationData.commission} SAR`;
+    document.getElementById('resultCurrentPrice').textContent = `${calculationData.currentPrice} SAR`;
     document.getElementById('resultTotalSelling').textContent = `${calculationData.totalSelling} SAR`;
     document.getElementById('resultSellingCommission').textContent = `${calculationData.sellingCommission} SAR`;
     document.getElementById('resultProfitLoss').textContent = `${calculationData.profitLoss} SAR`;
