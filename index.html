@@ -5,136 +5,246 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Profit Calculator – ER1991</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="splash-screen">
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button id="langBtn" class="lang-btn">
+            <i class="fas fa-language"></i>
+            <span class="lang-text">EN</span>
+        </button>
+    </div>
+
+    <!-- شاشة البداية -->
+    <div id="splashScreen" class="screen splash-active">
         <div class="splash-content">
-            <div class="logo-container">
-                <div class="logo-icon">📈</div>
+            <div class="logo-animation">
+                <div class="stock-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
                 <h1 class="app-name">Stock Profit Calculator</h1>
                 <p class="app-author">By ER1991</p>
-            </div>
-            <div class="splash-footer">
                 <p class="copyright">© ER1991 2026</p>
             </div>
         </div>
     </div>
 
-    <!-- Main App -->
-    <div id="main-app" class="main-app">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="brand">
-                    <span class="brand-icon">📊</span>
-                    <div class="brand-text">
-                        <h1>Stock Profit Calculator</h1>
-                        <span>By ER1991</span>
+    <!-- شاشة الحساب -->
+    <div id="calculatorScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 data-ar="حاسبة أرباح الأسهم" data-en="Stock Calculator">حاسبة أرباح الأسهم</h2>
+                <p class="subtitle" data-ar="ادخل البيانات بدقة للحصول على نتائج دقيقة" data-en="Enter accurate data for precise results">
+                    ادخل البيانات بدقة للحصول على نتائج دقيقة
+                </p>
+            </div>
+
+            <div class="form-container">
+                <form id="stockForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="stockName" data-ar="اسم السهم" data-en="Stock Name">
+                                اسم السهم
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-chart-line"></i>
+                                <input type="text" id="stockName" placeholder="مثال: أرامكو" data-ar="مثال: أرامكو" data-en="e.g: Aramco" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shares" data-ar="عدد الأسهم" data-en="Number of Shares">
+                                عدد الأسهم
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-hashtag"></i>
+                                <input type="number" id="shares" placeholder="0" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="purchasePrice" data-ar="سعر الشراء للسهم" data-en="Share Price at Purchase">
+                                سعر الشراء للسهم
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-tag"></i>
+                                <input type="number" id="purchasePrice" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalPurchase" data-ar="إجمالي سعر الشراء" data-en="Total Purchase Price">
+                                إجمالي سعر الشراء
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <input type="number" id="totalPurchase" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="currentPrice" data-ar="سعر السهم الحالي" data-en="Current Share Price">
+                                سعر السهم الحالي
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-chart-line"></i>
+                                <input type="number" id="currentPrice" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="commissionPercent" data-ar="عمولة (%)" data-en="Commission (%)">
+                                عمولة (%)
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-percentage"></i>
+                                <input type="number" id="commissionPercent" placeholder="0.00" min="0" max="100" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="commissionAmount" data-ar="مبلغ العمولة" data-en="Commission Amount">
+                                مبلغ العمولة
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-coins"></i>
+                                <input type="number" id="commissionAmount" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        <span data-ar="حساب النتائج" data-en="Calculate Results">حساب النتائج</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="footer">
+                <p>© ER1991 2026 - جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة النتائج -->
+    <div id="resultScreen" class="screen">
+        <div class="container">
+            <div class="result-header">
+                <h2 data-ar="نتيجة الحساب" data-en="Calculation Result">نتيجة الحساب</h2>
+                <button class="new-calc-btn" onclick="resetCalculator()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span data-ar="حساب جديد" data-en="New Calculation">حساب جديد</span>
+                </button>
+            </div>
+
+            <div class="result-grid">
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="اسم السهم" data-en="Stock Name">اسم السهم</span>
+                        <span id="resultStockName" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-hashtag"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="عدد الأسهم" data-en="Number of Shares">عدد الأسهم</span>
+                        <span id="resultShares" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="إجمالي الشراء بدون عمولة" data-en="Total Purchase (Excl. Commission)">
+                            إجمالي الشراء بدون عمولة
+                        </span>
+                        <span id="resultTotalPurchase" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="إجمالي الشراء بالعمولة" data-en="Total Purchase (Incl. Commission)">
+                            إجمالي الشراء بالعمولة
+                        </span>
+                        <span id="resultTotalWithCommission" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="مبلغ العمولة" data-en="Commission Amount">مبلغ العمولة</span>
+                        <span id="resultCommission" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="إجمالي البيع" data-en="Total Selling Amount">إجمالي البيع</span>
+                        <span id="resultTotalSelling" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card profit-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="الربح / الخسارة" data-en="Profit / Loss">الربح / الخسارة</span>
+                        <span id="resultProfitLoss" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card percentage-card">
+                    <div class="card-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="label" data-ar="النسبة المئوية" data-en="Percentage">النسبة المئوية</span>
+                        <span id="resultPercentage" class="value"></span>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <!-- Calculator Form -->
-        <main class="main-content">
-            <div class="container">
-                <div class="calculator-card">
-                    <h2 class="section-title">🧮 حاسبة الأرباح والخسائر</h2>
-                    
-                    <form id="stock-form" class="stock-form">
-                        <!-- Stock Name -->
-                        <div class="form-group">
-                            <label for="stock-name">اسم السهم *</label>
-                            <input type="text" id="stock-name" placeholder="مثال: Apple (AAPL)" required>
-                        </div>
-
-                        <!-- Number of Shares -->
-                        <div class="form-group">
-                            <label for="shares-count">عدد الأسهم *</label>
-                            <input type="number" id="shares-count" placeholder="100" min="1" step="1" required>
-                        </div>
-
-                        <!-- Purchase Price Section -->
-                        <div class="form-section">
-                            <h3>💰 سعر الشراء (اختياري أحدهما)</h3>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="purchase-price-per-share">سعر السهم الواحد</label>
-                                    <input type="number" id="purchase-price-per-share" placeholder="150.00" min="0" step="0.01">
-                                    <span class="input-hint">$ / سهم</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="total-purchase-price">الإجمالي الكلي</label>
-                                    <input type="number" id="total-purchase-price" placeholder="15000.00" min="0" step="0.01">
-                                    <span class="input-hint">$ إجمالي</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Current Price -->
-                        <div class="form-group highlight">
-                            <label for="current-price">السعر الحالي للسهم *</label>
-                            <input type="number" id="current-price" placeholder="175.00" min="0" step="0.01" required>
-                            <span class="input-hint">$ / سهم</span>
-                        </div>
-
-                        <!-- Commission Section -->
-                        <div class="form-section">
-                            <h3>⚖️ العمولة (اختياري أحدهما)</h3>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="commission-percent">نسبة العمولة %</label>
-                                    <input type="number" id="commission-percent" placeholder="0.5" min="0" max="100" step="0.01">
-                                    <span class="input-hint">%</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="commission-amount">مبلغ العمولة</label>
-                                    <input type="number" id="commission-amount" placeholder="75.00" min="0" step="0.01">
-                                    <span class="input-hint">$</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="calculate-btn">
-                            <span>📊 حساب النتيجة</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </main>
-
-        <footer class="app-footer">
-            <p>© ER1991 2026</p>
-        </footer>
-    </div>
-
-    <!-- Result Screen -->
-    <div id="result-screen" class="result-screen hidden">
-        <div class="result-container">
-            <div class="result-header">
-                <button id="back-btn" class="icon-btn">←</button>
-                <h2>نتيجة الحساب</h2>
+            <div class="image-preview">
+                <canvas id="receiptCanvas" width="500" height="700"></canvas>
             </div>
 
-            <!-- Canvas for Receipt -->
-            <div class="receipt-wrapper">
-                <canvas id="receipt-canvas" width="600" height="800"></canvas>
-            </div>
+            <button class="download-btn" onclick="downloadReceipt()">
+                <i class="fas fa-download"></i>
+                <span data-ar="تحميل صورة النتيجة" data-en="Download Result Image">تحميل صورة النتيجة</span>
+            </button>
 
-            <div class="result-actions">
-                <button id="download-btn" class="action-btn primary">
-                    <span>⬇️</span>
-                    تحميل الصورة
-                </button>
-                <button id="new-calc-btn" class="action-btn secondary">
-                    <span>🔄</span>
-                    حساب جديد
-                </button>
+            <div class="footer">
+                <p>© ER1991 2026 - جميع الحقوق محفوظة</p>
             </div>
-
-            <p class="result-copyright">© ER1991 2026</p>
         </div>
     </div>
 
