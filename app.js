@@ -64,45 +64,35 @@ function updatePurchaseCalculations() {
     const commissionPercent = parseFloat(document.getElementById('commissionPercent').value) || 0;
     const commissionAmount = parseFloat(document.getElementById('commissionAmount').value) || 0;
 
-    // حساب سعر الشراء للسهم إذا لم يدخل
-    if (!purchasePrice && totalPurchase && shares) {
+    // إذا تم إدخال سعر الشراء وعدد الأسهم
+    if (purchasePrice > 0 && shares > 0 && totalPurchase === 0 && totalPurchaseIncl === 0) {
+        const calculatedTotalPurchase = purchasePrice * shares;
+        document.getElementById('totalPurchase').value = calculatedTotalPurchase.toFixed(2);
+        document.getElementById('totalPurchaseIncl').value = calculatedTotalPurchase.toFixed(2);
+    }
+
+    // إذا تم إدخال إجمالي الشراء وعدد الأسهم
+    if (totalPurchase > 0 && shares > 0 && purchasePrice === 0) {
         document.getElementById('purchasePrice').value = (totalPurchase / shares).toFixed(2);
     }
 
-    // حساب إجمالي سعر الشراء إذا لم يدخل
-    if (!totalPurchase && purchasePrice && shares) {
-        document.getElementById('totalPurchase').value = (purchasePrice * shares).toFixed(2);
+    // إذا تم إدخال إجمالي الشراء بالعمولة
+    if (totalPurchaseIncl > 0 && totalPurchase > 0 && commissionAmount === 0 && commissionPercent === 0) {
+        document.getElementById('commissionAmount').value = (totalPurchaseIncl - totalPurchase).toFixed(2);
+        document.getElementById('commissionPercent').value = ((totalPurchaseIncl - totalPurchase) / totalPurchase * 100).toFixed(2);
     }
 
-    // تحديث إجمالي الشراء بالعمولة
-    if (!isNaN(totalPurchase) && !isNaN(commissionAmount)) {
+    // إذا تم إدخال مبلغ العمولة
+    if (commissionAmount > 0 && totalPurchase > 0 && totalPurchaseIncl === 0) {
         document.getElementById('totalPurchaseIncl').value = (totalPurchase + commissionAmount).toFixed(2);
+        document.getElementById('commissionPercent').value = (commissionAmount / totalPurchase * 100).toFixed(2);
     }
 
-    // تحديث مبلغ العمولة من النسبة
-    if (!isNaN(totalPurchase) && !isNaN(commissionPercent)) {
+    // إذا تم إدخال نسبة العمولة
+    if (commissionPercent > 0 && totalPurchase > 0 && commissionAmount === 0) {
         const calculatedCommission = (totalPurchase * commissionPercent) / 100;
         document.getElementById('commissionAmount').value = calculatedCommission.toFixed(2);
         document.getElementById('totalPurchaseIncl').value = (totalPurchase + calculatedCommission).toFixed(2);
-    }
-
-    // تحديث النسبة من مبلغ العمولة
-    if (!isNaN(totalPurchase) && !isNaN(commissionAmount) && totalPurchase > 0) {
-        const calculatedPercent = (commissionAmount / totalPurchase) * 100;
-        document.getElementById('commissionPercent').value = calculatedPercent.toFixed(2);
-    }
-
-    // تحديث إجمالي الشراء من إجمالي الشراء بالعمولة
-    if (!isNaN(totalPurchaseIncl) && !isNaN(commissionAmount)) {
-        document.getElementById('totalPurchase').value = (totalPurchaseIncl - commissionAmount).toFixed(2);
-    }
-
-    // تحديث مبلغ العمولة من إجمالي الشراء بالعمولة
-    if (!isNaN(totalPurchaseIncl) && !isNaN(totalPurchase)) {
-        document.getElementById('commissionAmount').value = (totalPurchaseIncl - totalPurchase).toFixed(2);
-        if (totalPurchase > 0) {
-            document.getElementById('commissionPercent').value = ((totalPurchaseIncl - totalPurchase) / totalPurchase * 100).toFixed(2);
-        }
     }
     
     isCalculating = false;
@@ -117,17 +107,16 @@ function updateSellingCalculations() {
     const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 0;
     const sellingCommissionPercent = parseFloat(document.getElementById('sellingCommissionPercent').value) || 0;
     const sellingCommissionAmount = parseFloat(document.getElementById('sellingCommissionAmount').value) || 0;
-
     const totalSelling = currentPrice * shares;
 
-    // تحديث مبلغ عمولة البيع من النسبة
-    if (!isNaN(totalSelling) && !isNaN(sellingCommissionPercent)) {
+    // إذا تم إدخال نسبة عمولة البيع
+    if (sellingCommissionPercent > 0 && totalSelling > 0 && sellingCommissionAmount === 0) {
         const calculatedCommission = (totalSelling * sellingCommissionPercent) / 100;
         document.getElementById('sellingCommissionAmount').value = calculatedCommission.toFixed(2);
     }
 
-    // تحديث النسبة من مبلغ عمولة البيع
-    if (!isNaN(totalSelling) && !isNaN(sellingCommissionAmount) && totalSelling > 0) {
+    // إذا تم إدخال مبلغ عمولة البيع
+    if (sellingCommissionAmount > 0 && totalSelling > 0 && sellingCommissionPercent === 0) {
         const calculatedPercent = (sellingCommissionAmount / totalSelling) * 100;
         document.getElementById('sellingCommissionPercent').value = calculatedPercent.toFixed(2);
     }
