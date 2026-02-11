@@ -716,10 +716,17 @@
                                 </div>
                             </div>
                             
-                            <div class="form-group floating">
-                                <input type="number" id="purchase-commission-amount" placeholder=" " min="0" step="0.01">
-                                <label for="purchase-commission-amount" data-i18n="purchaseCommissionAmount">العمولة</label>
-                                <span class="currency">$</span>
+                            <div class="form-row">
+                                <div class="form-group floating">
+                                    <input type="number" id="purchase-commission-percent" placeholder=" " min="0" max="100" step="0.01">
+                                    <label for="purchase-commission-percent" data-i18n="commissionPercent">نسبة %</label>
+                                    <span class="currency">%</span>
+                                </div>
+                                <div class="form-group floating">
+                                    <input type="number" id="purchase-commission-amount" placeholder=" " min="0" step="0.01">
+                                    <label for="purchase-commission-amount" data-i18n="commissionAmount">مبلغ ثابت</label>
+                                    <span class="currency">$</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -734,6 +741,19 @@
                             <div class="section-header">
                                 <span class="section-icon" style="background: var(--gradient-3);">⚖️</span>
                                 <h3 data-i18n="sellingDetails">تفاصيل البيع</h3>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group floating">
+                                    <input type="number" id="selling-price-per-share" placeholder=" " min="0" step="0.01">
+                                    <label for="selling-price-per-share" data-i18n="sellingPricePerShare">سعر السهم</label>
+                                    <span class="currency">$</span>
+                                </div>
+                                <div class="form-group floating">
+                                    <input type="number" id="total-selling-price" placeholder=" " min="0" step="0.01">
+                                    <label for="total-selling-price" data-i18n="totalSelling">الإجمالي</label>
+                                    <span class="currency">$</span>
+                                </div>
                             </div>
                             
                             <div class="form-row">
@@ -780,7 +800,7 @@
             </div>
             
             <div class="receipt-wrapper glass">
-                <canvas id="receipt-canvas" width="600" height="900"></canvas>
+                <canvas id="receipt-canvas" width="600" height="950"></canvas>
             </div>
             
             <div class="result-actions">
@@ -828,7 +848,9 @@
                 currentValue: 'القيمة الحالية',
                 totalSelling: 'إجمالي البيع الصافي',
                 date: 'التاريخ',
-                time: 'الوقت'
+                time: 'الوقت',
+                sellingPricePerShare: 'سعر السهم',
+                totalSelling: 'الإجمالي'
             },
             en: {
                 appNameShort: 'Stock Calc',
@@ -856,7 +878,9 @@
                 currentValue: 'Current Value',
                 totalSelling: 'Net Selling Amount',
                 date: 'Date',
-                time: 'Time'
+                time: 'Time',
+                sellingPricePerShare: 'Selling Price per Share',
+                totalSelling: 'Total Selling'
             }
         };
         
@@ -879,8 +903,11 @@
                 this.sharesCount = document.getElementById('shares-count');
                 this.purchasePricePerShare = document.getElementById('purchase-price-per-share');
                 this.totalPurchasePrice = document.getElementById('total-purchase-price');
+                this.purchaseCommissionPercent = document.getElementById('purchase-commission-percent');
                 this.purchaseCommissionAmount = document.getElementById('purchase-commission-amount');
                 this.currentPrice = document.getElementById('current-price');
+                this.sellingPricePerShare = document.getElementById('selling-price-per-share');
+                this.totalSellingPrice = document.getElementById('total-selling-price');
                 this.sellingCommissionPercent = document.getElementById('selling-commission-percent');
                 this.sellingCommissionAmount = document.getElementById('selling-commission-amount');
                 this.backBtn = document.getElementById('back-btn');
@@ -916,8 +943,11 @@
                 const shares = this.sharesCount;
                 const pricePerShare = this.purchasePricePerShare;
                 const totalPrice = this.totalPurchasePrice;
-                const purchaseCommission = this.purchaseCommissionAmount;
+                const purchaseCommPercent = this.purchaseCommissionPercent;
+                const purchaseCommAmount = this.purchaseCommissionAmount;
                 const currentPrice = this.currentPrice;
+                const sellingPrice = this.sellingPricePerShare;
+                const totalSelling = this.totalSellingPrice;
                 const sellingCommPercent = this.sellingCommissionPercent;
                 const sellingCommAmount = this.sellingCommissionAmount;
                 
@@ -939,27 +969,51 @@
                 // حسابات البيع
                 currentPrice.addEventListener('input', () => {
                     if (currentPrice.value && shares.value) {
-                        // لا نفعل أي شيء هنا، لكن يمكننا إضافة حسابات إضافية إذا لزم
+                        const total = parseFloat(currentPrice.value) * parseInt(shares.value);
+                        sellingPrice.value = currentPrice.value;
+                        totalSelling.value = total.toFixed(2);
+                    }
+                });
+                
+                sellingPrice.addEventListener('input', () => {
+                    if (sellingPrice.value && shares.value) {
+                        const total = parseFloat(sellingPrice.value) * parseInt(shares.value);
+                        totalSelling.value = total.toFixed(2);
+                    }
+                });
+                
+                totalSelling.addEventListener('input', () => {
+                    if (totalSelling.value && shares.value) {
+                        const perShare = parseFloat(totalSelling.value) / parseInt(shares.value);
+                        sellingPrice.value = perShare.toFixed(2);
                     }
                 });
                 
                 // حسابات العمولة
-                purchaseCommission.addEventListener('input', () => {
-                    // لا نفعل أي شيء هنا، لكن يمكننا إضافة حسابات إضافية إذا لزم
+                purchaseCommPercent.addEventListener('input', () => {
+                    if (purchaseCommPercent.value && totalPrice.value) {
+                        const comm = (parseFloat(totalPrice.value) * parseFloat(purchaseCommPercent.value)) / 100;
+                        purchaseCommAmount.value = comm.toFixed(2);
+                    }
+                });
+                
+                purchaseCommAmount.addEventListener('input', () => {
+                    if (purchaseCommAmount.value && totalPrice.value) {
+                        const percent = (parseFloat(purchaseCommAmount.value) / parseFloat(totalPrice.value)) * 100;
+                        purchaseCommPercent.value = percent.toFixed(2);
+                    }
                 });
                 
                 sellingCommPercent.addEventListener('input', () => {
-                    if (sellingCommPercent.value && currentPrice.value && shares.value) {
-                        const total = parseFloat(currentPrice.value) * parseInt(shares.value);
-                        const comm = (total * parseFloat(sellingCommPercent.value)) / 100;
+                    if (sellingCommPercent.value && totalSelling.value) {
+                        const comm = (parseFloat(totalSelling.value) * parseFloat(sellingCommPercent.value)) / 100;
                         sellingCommAmount.value = comm.toFixed(2);
                     }
                 });
                 
                 sellingCommAmount.addEventListener('input', () => {
-                    if (sellingCommAmount.value && currentPrice.value && shares.value) {
-                        const total = parseFloat(currentPrice.value) * parseInt(shares.value);
-                        const percent = (parseFloat(sellingCommAmount.value) / total) * 100;
+                    if (sellingCommAmount.value && totalSelling.value) {
+                        const percent = (parseFloat(sellingCommAmount.value) / parseFloat(totalSelling.value)) * 100;
                         sellingCommPercent.value = percent.toFixed(2);
                     }
                 });
@@ -994,10 +1048,12 @@
             calculate() {
                 const shares = parseInt(this.sharesCount.value);
                 const purchasePrice = parseFloat(this.purchasePricePerShare.value) || 0;
-                const purchaseCommission = parseFloat(this.purchaseCommissionAmount.value) || 0;
+                const purchaseCommissionPercent = parseFloat(this.purchaseCommissionPercent.value) || 0;
+                const purchaseCommissionAmount = parseFloat(this.purchaseCommissionAmount.value) || 0;
                 const currentPrice = parseFloat(this.currentPrice.value);
-                const sellingCommPercent = parseFloat(this.sellingCommissionPercent.value) || 0;
-                const sellingCommAmount = parseFloat(this.sellingCommissionAmount.value) || 0;
+                const sellingPrice = parseFloat(this.sellingPricePerShare.value) || currentPrice;
+                const sellingCommissionPercent = parseFloat(this.sellingCommissionPercent.value) || 0;
+                const sellingCommissionAmount = parseFloat(this.sellingCommissionAmount.value) || 0;
                 
                 if (!shares || !currentPrice) {
                     alert(this.currentLang === 'ar' ? 'الرجاء إدخال جميع البيانات المطلوبة' : 'Please fill in all required fields');
@@ -1005,18 +1061,11 @@
                 }
                 
                 const totalPurchase = purchasePrice * shares;
-                const totalPurchaseWithCommission = totalPurchase + purchaseCommission;
+                const totalPurchaseWithCommission = totalPurchase + purchaseCommissionAmount;
                 const currentValue = currentPrice * shares;
-                
-                let sellingCommission = 0;
-                if (sellingCommPercent > 0) {
-                    sellingCommission = (currentValue * sellingCommPercent) / 100;
-                } else if (sellingCommAmount > 0) {
-                    sellingCommission = sellingCommAmount;
-                }
-                
-                const totalSelling = currentValue - sellingCommission;
-                const netProfit = totalSelling - totalPurchaseWithCommission;
+                const totalSelling = sellingPrice * shares;
+                const totalSellingWithCommission = totalSelling - sellingCommissionAmount;
+                const netProfit = totalSellingWithCommission - totalPurchaseWithCommission;
                 const profitPercent = totalPurchaseWithCommission > 0 ? (netProfit / totalPurchaseWithCommission) * 100 : 0;
                 
                 this.calculationData = {
@@ -1024,12 +1073,15 @@
                     shares: shares,
                     purchasePrice: purchasePrice,
                     totalPurchase: totalPurchase,
-                    purchaseCommission: purchaseCommission,
+                    purchaseCommissionPercent: purchaseCommissionPercent,
+                    purchaseCommissionAmount: purchaseCommissionAmount,
                     totalPurchaseWithCommission: totalPurchaseWithCommission,
                     currentPrice: currentPrice,
-                    currentValue: currentValue,
-                    sellingCommission: sellingCommission,
+                    sellingPrice: sellingPrice,
                     totalSelling: totalSelling,
+                    sellingCommissionPercent: sellingCommissionPercent,
+                    sellingCommissionAmount: sellingCommissionAmount,
+                    totalSellingWithCommission: totalSellingWithCommission,
                     netProfit: netProfit,
                     profitPercent: profitPercent,
                     date: new Date().toLocaleDateString(this.currentLang === 'ar' ? 'ar-SA' : 'en-US'),
@@ -1045,7 +1097,7 @@
                 const ctx = this.ctx;
                 const data = this.calculationData;
                 const width = 600;
-                const height = 900;
+                const height = 950;
                 const isAr = data.lang === 'ar';
                 const t = translations[data.lang];
                 
@@ -1143,10 +1195,10 @@
                 ctx.fillText(t.totalAmount, nameX, y + 24);
                 y += 60;
                 
-                // العمولة
+                // عمولة الشراء
                 ctx.fillStyle = '#f59e0b';
                 ctx.font = 'bold 20px Tajawal, Inter, Arial';
-                ctx.fillText(`$${data.purchaseCommission.toFixed(2)}`, nameX, y);
+                ctx.fillText(`$${data.purchaseCommissionAmount.toFixed(2)}`, nameX, y);
                 ctx.fillStyle = '#fbbf24';
                 ctx.font = '14px Tajawal, Inter, Arial';
                 ctx.fillText(t.purchaseCommissionAmount, nameX, y + 22);
@@ -1176,22 +1228,22 @@
                 ctx.textAlign = isAr ? 'left' : 'right';
                 ctx.fillText(`$${data.currentPrice.toFixed(2)}`, valX, y);
                 ctx.textAlign = isAr ? 'right' : 'left';
-                ctx.fillText(`$${data.currentValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, nameX, y);
+                ctx.fillText(`$${data.totalSelling.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, nameX, y);
                 ctx.fillStyle = '#64748b';
                 ctx.font = '14px Tajawal, Inter, Arial';
                 ctx.textAlign = isAr ? 'left' : 'right';
                 ctx.fillText(t.currentPrice, valX, y + 22);
                 ctx.textAlign = isAr ? 'right' : 'left';
-                ctx.fillText(t.currentValue, nameX, y + 22);
+                ctx.fillText(t.totalSelling, nameX, y + 22);
                 y += 65;
                 
                 // خط فاصل
                 this.drawDivider(ctx, 50, y - 15, width - 100, 'rgba(16, 185, 129, 0.3)');
                 
-                // العمولة
+                // عمولة البيع
                 ctx.fillStyle = '#f59e0b';
                 ctx.font = 'bold 20px Tajawal, Inter, Arial';
-                ctx.fillText(`-$${data.sellingCommission.toFixed(2)}`, nameX, y);
+                ctx.fillText(`-$${data.sellingCommissionAmount.toFixed(2)}`, nameX, y);
                 ctx.fillStyle = '#fbbf24';
                 ctx.font = '14px Tajawal, Inter, Arial';
                 ctx.fillText(t.commission, nameX, y + 22);
@@ -1200,7 +1252,7 @@
                 // إجمالي البيع
                 ctx.fillStyle = '#10b981';
                 ctx.font = 'bold 26px Tajawal, Inter, Arial';
-                ctx.fillText(`$${data.totalSelling.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, nameX, y);
+                ctx.fillText(`$${data.totalSellingWithCommission.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, nameX, y);
                 ctx.fillStyle = '#64748b';
                 ctx.font = '14px Tajawal, Inter, Arial';
                 ctx.fillText(t.totalSelling, nameX, y + 24);
